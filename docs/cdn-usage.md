@@ -9,12 +9,12 @@
 <script>
 jspt.importScript({
     names: ['material_symbols_rounded']
-});
-
-jspt.makeToast({ 
-    message: "Hello from CDN!",
-    icon_left: "check_circle",
-    icon_left_type: "google_material_rounded"
+}).then(() => {
+    jspt.makeToast({ 
+        message: "Hello from CDN!",
+        icon_left: "check_circle",
+        icon_left_type: "google_material_rounded"
+    });
 });
 </script>
 ```
@@ -35,6 +35,8 @@ jspt.makeToast({
 <script>
 jspt.importScript({
     names: ['material_symbols_rounded']
+}).then(() => {
+    console.log('Icons loaded and ready to use');
 });
 </script>
 ```

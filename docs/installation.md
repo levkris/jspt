@@ -9,12 +9,12 @@
 <script>
 jspt.importScript({
     names: ['material_symbols_rounded']
-});
-
-jspt.makeToast({ 
-    message: "Hello from CDN!",
-    icon_left: "check_circle",
-    icon_left_type: "google_material_rounded"
+}).then(() => {
+    jspt.makeToast({ 
+        message: "Hello from CDN!",
+        icon_left: "check_circle",
+        icon_left_type: "google_material_rounded"
+    });
 });
 </script>
 ```
@@ -34,12 +34,12 @@ jspt.makeToast({
 <script>
 jspt.importScript({
     names: ['material_symbols_rounded']
-});
-
-jspt.makeToast({ 
-    message: "Hello World!",
-    icon_left: "check_circle",
-    icon_left_type: "google_material_rounded"
+}).then(() => {
+    jspt.makeToast({ 
+        message: "Hello World!",
+        icon_left: "check_circle",
+        icon_left_type: "google_material_rounded"
+    });
 });
 </script>
 ```
@@ -90,5 +90,7 @@ When using classic scripts, call `jspt.importScript()` with one or more of these
 ```javascript
 jspt.importScript({
     names: ['material_symbols_rounded', 'lucide', 'highlightjs']
+}).then(() => {
+    console.log('All libraries loaded!');
 });
 ```

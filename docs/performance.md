@@ -28,7 +28,11 @@
    jspt.importScript({
        names: ['material_symbols_rounded']
    }).then(() => {
-       console.log('Icons loaded');
+       jspt.makeToast({
+           message: "Icons loaded!",
+           icon_left: "check_circle",
+           icon_left_type: "google_material_rounded"
+       });
    });
    ```
 4. **Preload critical resources** to reduce load time

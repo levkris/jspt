@@ -9,12 +9,23 @@
 <script>
 jspt.importScript({
     names: ['material_symbols_rounded']
+}).then(() => {
+    console.log('Icons loaded!');
 });
 </script>
 
-<button onclick="jspt.makeToast({ message: 'Hello CDN!', icon_left: 'check_circle', icon_left_type: 'google_material_rounded' })">Show Toast</button>
-
+<button onclick="showToast()">Show Toast</button>
 <button onclick="jspt.makePopup({ content_type: 'text', header: 'Info', message: 'Hello Popup!' })">Show Popup</button>
+
+<script>
+function showToast() {
+    jspt.makeToast({ 
+        message: 'Hello CDN!', 
+        icon_left: 'check_circle', 
+        icon_left_type: 'google_material_rounded' 
+    });
+}
+</script>
 ```
 
 ---
@@ -30,18 +41,18 @@ jspt.importScript({
 <script>
 jspt.importScript({
     names: ['material_symbols_rounded']
-});
+}).then(() => {
+    jspt.makeToast({ 
+        message: "Self-hosted toast",
+        icon_left: "notifications",
+        icon_left_type: "google_material_rounded"
+    });
 
-jspt.makeToast({ 
-    message: "Self-hosted toast",
-    icon_left: "notifications",
-    icon_left_type: "google_material_rounded"
-});
-
-jspt.makePopup({ 
-    content_type: 'text', 
-    header: 'Welcome', 
-    message: 'Hello!' 
+    jspt.makePopup({ 
+        content_type: 'text', 
+        header: 'Welcome', 
+        message: 'Hello!' 
+    });
 });
 </script>
 ```
