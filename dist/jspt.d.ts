@@ -28,23 +28,16 @@ export interface ClosePopupOptions {
     custom_id: string;
 }
 
-export interface ImportScripts {
-    names: Array <'highlightjs' | 'material_symbols_rounded' | 'material_symbols_outlined' | 'lucide'>;
-};
-
 export function makePopup(options: PopupOptions): void;
 
 export function makeToast(options: ToastOptions): void;
 
 export function closePopup(options: ClosePopupOptions): void;
 
-export function importScripts(options: ImportScripts): void;
-
 declare const jspt: {
     makePopup: typeof makePopup;
     makeToast: typeof makeToast;
     closePopup: typeof closePopup;
-    importScripts: typeof importScripts;
 };
 
 export default jspt;
