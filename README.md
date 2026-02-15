@@ -7,6 +7,7 @@ This site covers **installation**, **CDN usage**, **API reference**, **examples*
 - [Introduction](docs/introduction.md)
 - [Installation](docs/installation.md)
 - [CDN Usage](docs/cdn-usage.md)
+- [Themes](themes/themes.md)
 - [API Reference](docs/api-reference.md)
 - [Examples](docs/examples.md)
 - [Styling](docs/styling.md)
