@@ -1,0 +1,184 @@
+name: Post Validation Results
+
+on:
+  workflow_run:
+    workflows: ["Theme Submission Validation"]
+    types:
+      - completed
+
+permissions:
+  contents: read
+  issues: write
+  pull-requests: write
+  statuses: write
+
+jobs:
+  post-results:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Download artifacts
+        uses: dawidd6/action-download-artifact@v6
+        with:
+          workflow: validate-theme.yml
+          run_id: ${{ github.event.workflow_run.id }}
+          path: artifacts
+          
+      - name: List downloaded artifacts
+        run: |
+          echo "Downloaded artifacts:"
+          find artifacts -type f -ls
+          
+      - name: Post validation results
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const path = require('path');
+            
+            console.log('Checking for artifact directories...');
+            
+            let prNumber, prSha;
+            
+            try {
+              if (fs.existsSync('artifacts/validation-results/pr-number.txt')) {
+                prNumber = fs.readFileSync('artifacts/validation-results/pr-number.txt', 'utf8').trim();
+                prSha = fs.readFileSync('artifacts/validation-results/pr-sha.txt', 'utf8').trim();
+                console.log(`Found validation results for PR #${prNumber}`);
+              } else if (fs.existsSync('artifacts/template-results/pr-number.txt')) {
+                prNumber = fs.readFileSync('artifacts/template-results/pr-number.txt', 'utf8').trim();
+                prSha = fs.readFileSync('artifacts/template-results/pr-sha.txt', 'utf8').trim();
+                console.log(`Found template results for PR #${prNumber}`);
+              } else {
+                console.log('No PR metadata found');
+                console.log('Artifacts directory contents:');
+                if (fs.existsSync('artifacts')) {
+                  const walk = (dir) => {
+                    const files = fs.readdirSync(dir, { withFileTypes: true });
+                    files.forEach(file => {
+                      const filePath = path.join(dir, file.name);
+                      if (file.isDirectory()) {
+                        console.log(`DIR: ${filePath}`);
+                        walk(filePath);
+                      } else {
+                        console.log(`FILE: ${filePath}`);
+                      }
+                    });
+                  };
+                  walk('artifacts');
+                } else {
+                  console.log('Artifacts directory does not exist');
+                }
+                return;
+              }
+            } catch (error) {
+              console.error('Error reading PR metadata:', error);
+              return;
+            }
+            
+            console.log(`Processing results for PR #${prNumber}, SHA: ${prSha}`);
+            
+            if (fs.existsSync('artifacts/validation-results/outcome.txt')) {
+              const outcome = fs.readFileSync('artifacts/validation-results/outcome.txt', 'utf8').trim();
+              console.log(`Theme validation outcome: ${outcome}`);
+              
+              if (outcome === 'failure') {
+                let comment = '## ❌ Theme Submission Validation Failed\n\n';
+                
+                if (fs.existsSync('artifacts/validation-results/validation-errors.txt')) {
+                  const errors = fs.readFileSync('artifacts/validation-results/validation-errors.txt', 'utf8');
+                  comment += errors;
+                } else {
+                  comment += 'Unknown validation error occurred.';
+                }
+                
+                comment += '\n\n---\n*Please fix these issues and update your PR.*';
+                
+                try {
+                  await github.rest.issues.createComment({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    issue_number: parseInt(prNumber),
+                    body: comment
+                  });
+                  console.log('Posted failure comment');
+                } catch (error) {
+                  console.error('Error posting comment:', error);
+                }
+                
+                try {
+                  await github.rest.repos.createCommitStatus({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    sha: prSha,
+                    state: 'failure',
+                    context: 'Theme Validation',
+                    description: 'Validation checks failed. See comments for details.'
+                  });
+                  console.log('Set failure status');
+                } catch (error) {
+                  console.error('Error setting status:', error);
+                }
+              } else if (outcome === 'success') {
+                try {
+                  await github.rest.issues.createComment({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    issue_number: parseInt(prNumber),
+                    body: '## ✅ Theme Submission Validation Passed\n\nAll validation checks passed successfully!'
+                  });
+                  console.log('Posted success comment');
+                } catch (error) {
+                  console.error('Error posting comment:', error);
+                }
+                
+                try {
+                  await github.rest.repos.createCommitStatus({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    sha: prSha,
+                    state: 'success',
+                    context: 'Theme Validation',
+                    description: 'All validation checks passed!'
+                  });
+                  console.log('Set success status');
+                } catch (error) {
+                  console.error('Error setting status:', error);
+                }
+              }
+            }
+            
+            if (fs.existsSync('artifacts/template-results/outcome.txt')) {
+              const outcome = fs.readFileSync('artifacts/template-results/outcome.txt', 'utf8').trim();
+              console.log(`Template validation outcome: ${outcome}`);
+              
+              if (outcome === 'failure' && fs.existsSync('artifacts/template-results/template-errors.txt')) {
+                const comment = fs.readFileSync('artifacts/template-results/template-errors.txt', 'utf8');
+                
+                try {
+                  await github.rest.issues.createComment({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    issue_number: parseInt(prNumber),
+                    body: comment
+                  });
+                  console.log('Posted template failure comment');
+                } catch (error) {
+                  console.error('Error posting template comment:', error);
+                }
+              } else if (outcome === 'success' && fs.existsSync('artifacts/template-results/template-success.txt')) {
+                const comment = fs.readFileSync('artifacts/template-results/template-success.txt', 'utf8');
+                
+                try {
+                  await github.rest.issues.createComment({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    issue_number: parseInt(prNumber),
+                    body: comment
+                  });
+                  console.log('Posted template success comment');
+                } catch (error) {
+                  console.error('Error posting template comment:', error);
+                }
+              }
+            }
