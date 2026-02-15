@@ -3,8 +3,8 @@
 ## CDN Example
 
 ```html
-<link rel="stylesheet" href="https://cdn.wokki20.nl/content/jspt-v2.0.5/jspt.css">
-<script src="https://cdn.wokki20.nl/content/jspt-v2.0.5/jspt.min.js"></script>
+<link rel="stylesheet" href="https://cdn.wokki20.nl/content/jspt-v2.0.6/jspt.css">
+<script src="https://cdn.wokki20.nl/content/jspt-v2.0.6/jspt.min.js"></script>
 
 <script>
 jspt.importScript({
@@ -86,8 +86,8 @@ makePopup({
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>JSPT Example</title>
     
-    <link rel="stylesheet" href="https://cdn.wokki20.nl/content/jspt-v2.0.5/jspt.css">
-    <script src="https://cdn.wokki20.nl/content/jspt-v2.0.5/jspt.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.wokki20.nl/content/jspt-v2.0.6/jspt.css">
+    <script src="https://cdn.wokki20.nl/content/jspt-v2.0.6/jspt.min.js"></script>
 </head>
 <body>
     <h1>JSPT Demo</h1>

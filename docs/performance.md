@@ -6,8 +6,8 @@
 - ✅ Preload scripts for faster loading:
 
 ```html
-<link rel="preload" href="https://cdn.wokki20.nl/content/jspt-v2.0.5/jspt.min.js" as="script">
-<link rel="preload" href="https://cdn.wokki20.nl/content/jspt-v2.0.5/jspt.css" as="style">
+<link rel="preload" href="https://cdn.wokki20.nl/content/jspt-v2.0.6/jspt.min.js" as="script">
+<link rel="preload" href="https://cdn.wokki20.nl/content/jspt-v2.0.6/jspt.css" as="style">
 ```
 
 ## File Sizes
