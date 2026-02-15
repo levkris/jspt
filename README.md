@@ -23,22 +23,21 @@ Get started in seconds with our CDN:
 </head>
 <body>
     <script>
-        // Import icon libraries (required for classic scripts)
         jspt.importScript({
             names: ['material_symbols_rounded']
-        });
-
-        // Show a toast notification
-        jspt.makeToast({
-            message: "Hello World!",
-            duration: 3000
-        });
-        
-        // Show a popup
-        jspt.makePopup({
-            content_type: "text",
-            header: "Welcome",
-            message: "JSPT is ready to use!"
+        }).then(() => {
+            jspt.makeToast({
+                message: "Hello World!",
+                icon_left: "check_circle",
+                icon_left_type: "google_material_rounded",
+                duration: 3000
+            });
+            
+            jspt.makePopup({
+                content_type: "text",
+                header: "Welcome",
+                message: "JSPT is ready to use!"
+            });
         });
     </script>
 </body>
@@ -73,6 +72,7 @@ See [FOLDER_STRUCTURE.md](FOLDER_STRUCTURE.md) for detailed information.
 - ⚡ No extra required dependencies (unless you want icons like Lucide or Google Material)
 - 🎭 Customizable icons and styles
 - 📱 Responsive and mobile-friendly
+- ⏱️ Promise-based script loading
 
 ## Installation
 
@@ -88,15 +88,14 @@ See [FOLDER_STRUCTURE.md](FOLDER_STRUCTURE.md) for detailed information.
 
 <!-- Usage -->
 <script>
-// Import icon libraries (required for classic scripts when using icons)
 jspt.importScript({
     names: ['material_symbols_rounded']
-});
-
-jspt.makeToast({
-    message: "Hello from CDN!",
-    icon_left: "check_circle",
-    icon_left_type: "google_material_rounded"
+}).then(() => {
+    jspt.makeToast({
+        message: "Hello from CDN!",
+        icon_left: "check_circle",
+        icon_left_type: "google_material_rounded"
+    });
 });
 </script>
 ```
@@ -132,15 +131,14 @@ makeToast({ message: "ES Module from CDN!" });
 <script src="dist/jspt.js"></script>
 
 <script>
-// Import icon libraries first (required for classic scripts when using icons)
 jspt.importScript({
     names: ['material_symbols_rounded']
-});
-
-jspt.makeToast({
-    message: "Hello World!",
-    icon_left: "check_circle",
-    icon_left_type: "google_material_rounded"
+}).then(() => {
+    jspt.makeToast({
+        message: "Hello World!",
+        icon_left: "check_circle",
+        icon_left_type: "google_material_rounded"
+    });
 });
 </script>
 ```
@@ -175,11 +173,15 @@ npm install @wokki20/jspt
 
 ### Classic Scripts (Regular `<script>` tag)
 
-When using JSPT with classic scripts, you **must** call `jspt.importScript()` to load icon libraries:
+When using JSPT with classic scripts, you **must** call `jspt.importScript()` to load icon libraries. This function returns a promise that resolves when all scripts are loaded:
 
 ```javascript
 jspt.importScript({
     names: ['material_symbols_rounded', 'material_symbols_outlined', 'lucide']
+}).then(() => {
+    console.log('All libraries loaded successfully!');
+}).catch(error => {
+    console.error('Failed to load libraries:', error);
 });
 ```
 
@@ -188,6 +190,12 @@ jspt.importScript({
 - `'material_symbols_outlined'` - Google Material Symbols (Outlined)
 - `'lucide'` - Lucide Icons
 - `'highlightjs'` - Highlight.js (for code syntax highlighting)
+
+**Features:**
+- Returns a promise that resolves when all scripts are loaded
+- Automatically detects and skips already-imported libraries
+- Logs warnings if libraries are already loaded
+- Rejects promise if any script fails to load
 
 ### ES Modules
 
@@ -287,14 +295,14 @@ jspt.makeToast({
 // For classic scripts, import icons first
 jspt.importScript({
     names: ['material_symbols_rounded']
-});
-
-jspt.makeToast({
-    message: "Success!",
-    style: "default",
-    icon_left: "check_circle",
-    icon_left_type: "google_material_rounded",
-    duration: 3000
+}).then(() => {
+    jspt.makeToast({
+        message: "Success!",
+        style: "default",
+        icon_left: "check_circle",
+        icon_left_type: "google_material_rounded",
+        duration: 3000
+    });
 });
 ```
 
@@ -361,6 +369,8 @@ jspt.makePopup({
 |----------|------|-------------|
 | `names` | string[] | Array of library names to import |
 
+**Returns:** `Promise<void[]>` - Resolves when all scripts are loaded
+
 **Available libraries:**
 - `'highlightjs'` - Highlight.js for code syntax highlighting
 - `'material_symbols_rounded'` - Google Material Symbols (Rounded)
@@ -373,6 +383,23 @@ jspt.importScript({
     names: ['material_symbols_rounded', 'lucide', 'highlightjs']
 });
 ```
+
+**With Promise:**
+```javascript
+jspt.importScript({
+    names: ['highlightjs']
+}).then(() => {
+    console.log('Scripts loaded successfully');
+    hljs.highlightAll();
+}).catch(error => {
+    console.error('Failed to load scripts:', error);
+});
+```
+
+**Behavior:**
+- Automatically detects and skips already-imported libraries (logs a warning to console)
+- Resolves the promise once all scripts/stylesheets are loaded
+- Rejects if any script fails to load
 
 ### `jspt.makeToast(options)`
 
@@ -477,6 +504,8 @@ The TypeScript definitions are automatically picked up when you import the modul
     <script>
         jspt.importScript({
             names: ['material_symbols_rounded']
+        }).then(() => {
+            console.log('Icons ready!');
         });
 
         function showToast() {
@@ -520,6 +549,8 @@ See `examples/example-script.html` for a full working example.
     <script>
         jspt.importScript({
             names: ['material_symbols_rounded']
+        }).then(() => {
+            console.log('Icons loaded');
         });
 
         function showToast() {
@@ -613,6 +644,24 @@ document.getElementById('errorButton').addEventListener('click', () => {
 });
 ```
 
+### Using Promises with importScript
+
+```html
+<link rel="stylesheet" href="https://cdn.wokki20.nl/content/jspt-v2.1.0/jspt.css">
+<script src="https://cdn.wokki20.nl/content/jspt-v2.1.0/jspt.min.js"></script>
+
+<script>
+jspt.importScript({
+    names: ['highlightjs']
+}).then(() => {
+    console.log('Highlight.js loaded successfully');
+    hljs.highlightAll();
+}).catch(error => {
+    console.error('Failed to load scripts:', error);
+});
+</script>
+```
+
 ## Styling
 
 The library uses CSS custom properties for easy customization. You can override these in your own CSS:
@@ -635,6 +684,18 @@ The library uses CSS custom properties for easy customization. You can override 
   ```html
   <link rel="preload" href="https://cdn.wokki20.nl/content/jspt-v2.1.0/jspt.min.js" as="script">
   <link rel="preload" href="https://cdn.wokki20.nl/content/jspt-v2.1.0/jspt.css" as="style">
+  ```
+- ✅ **Lazy load icon libraries** only when needed:
+  ```javascript
+  jspt.importScript({
+      names: ['material_symbols_rounded']
+  }).then(() => {
+      jspt.makeToast({
+          message: "Icons loaded!",
+          icon_left: "check_circle",
+          icon_left_type: "google_material_rounded"
+      });
+  });
   ```
 
 ### File Sizes
