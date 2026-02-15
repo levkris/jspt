@@ -10,6 +10,8 @@
 |----------|------|-------------|
 | names | string[] | Array of library names to import |
 
+**Returns:** `Promise<void[]>` - Resolves when all scripts are loaded
+
 **Available libraries:**
 - `'highlightjs'` - Highlight.js for code syntax highlighting
 - `'material_symbols_rounded'` - Google Material Symbols (Rounded)
@@ -23,6 +25,22 @@ jspt.importScript({
     names: ['material_symbols_rounded', 'lucide']
 });
 ```
+
+**With Promise:**
+
+```javascript
+jspt.importScript({
+    names: ['highlightjs']
+}).then(() => {
+    console.log('Scripts loaded successfully');
+    hljs.highlightAll();
+});
+```
+
+**Behavior:**
+- Automatically detects and skips already-imported libraries (logs a warning to console)
+- Resolves the promise once all scripts/stylesheets are loaded
+- Rejects if any script fails to load
 
 **Note:** This function is only available when using JSPT as a classic script (regular `<script>` tag). When using ES modules, you must manually include icon libraries in your HTML.
 

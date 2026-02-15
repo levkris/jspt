@@ -6,8 +6,8 @@
 - ✅ Preload scripts for faster loading:
 
 ```html
-<link rel="preload" href="https://cdn.wokki20.nl/content/jspt-v2.0.6/jspt.min.js" as="script">
-<link rel="preload" href="https://cdn.wokki20.nl/content/jspt-v2.0.6/jspt.css" as="style">
+<link rel="preload" href="https://cdn.wokki20.nl/content/jspt-v2.1.0/jspt.min.js" as="script">
+<link rel="preload" href="https://cdn.wokki20.nl/content/jspt-v2.1.0/jspt.css" as="style">
 ```
 
 ## File Sizes
@@ -27,6 +27,8 @@
    ```javascript
    jspt.importScript({
        names: ['material_symbols_rounded']
+   }).then(() => {
+       console.log('Icons loaded');
    });
    ```
 4. **Preload critical resources** to reduce load time

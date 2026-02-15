@@ -1,4 +1,4 @@
-# ![logo](media/icon.svg) <small>v2.0.6</small>
+# ![logo](media/icon.svg) <small>v2.1.0</small>
 
 > The go-to library for creating toasts & popups
 

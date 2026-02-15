@@ -3,8 +3,8 @@
 ## CDN Example
 
 ```html
-<link rel="stylesheet" href="https://cdn.wokki20.nl/content/jspt-v2.0.6/jspt.css">
-<script src="https://cdn.wokki20.nl/content/jspt-v2.0.6/jspt.min.js"></script>
+<link rel="stylesheet" href="https://cdn.wokki20.nl/content/jspt-v2.1.0/jspt.css">
+<script src="https://cdn.wokki20.nl/content/jspt-v2.1.0/jspt.min.js"></script>
 
 <script>
 jspt.importScript({
@@ -76,6 +76,26 @@ makePopup({
 
 ---
 
+## Using Promises with importScript
+
+```html
+<link rel="stylesheet" href="https://cdn.wokki20.nl/content/jspt-v2.1.0/jspt.css">
+<script src="https://cdn.wokki20.nl/content/jspt-v2.1.0/jspt.min.js"></script>
+
+<script>
+jspt.importScript({
+    names: ['highlightjs']
+}).then(() => {
+    console.log('Highlight.js loaded successfully');
+    hljs.highlightAll();
+}).catch(error => {
+    console.error('Failed to load scripts:', error);
+});
+</script>
+```
+
+---
+
 ## Complete Example
 
 ```html
@@ -86,8 +106,8 @@ makePopup({
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>JSPT Example</title>
     
-    <link rel="stylesheet" href="https://cdn.wokki20.nl/content/jspt-v2.0.6/jspt.css">
-    <script src="https://cdn.wokki20.nl/content/jspt-v2.0.6/jspt.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.wokki20.nl/content/jspt-v2.1.0/jspt.css">
+    <script src="https://cdn.wokki20.nl/content/jspt-v2.1.0/jspt.min.js"></script>
 </head>
 <body>
     <h1>JSPT Demo</h1>
@@ -98,6 +118,8 @@ makePopup({
     <script>
         jspt.importScript({
             names: ['material_symbols_rounded']
+        }).then(() => {
+            console.log('Icons ready');
         });
 
         function showToast() {

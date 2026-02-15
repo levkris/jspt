@@ -3,8 +3,8 @@
 ## Versioned URLs (Recommended for Production)
 
 ```html
-<link rel="stylesheet" href="https://cdn.wokki20.nl/content/jspt-v2.0.6/jspt.css">
-<script src="https://cdn.wokki20.nl/content/jspt-v2.0.6/jspt.min.js"></script>
+<link rel="stylesheet" href="https://cdn.wokki20.nl/content/jspt-v2.1.0/jspt.css">
+<script src="https://cdn.wokki20.nl/content/jspt-v2.1.0/jspt.min.js"></script>
 
 <script>
 jspt.importScript({
@@ -51,12 +51,12 @@ jspt.importScript({
 ## ES Module from CDN
 
 ```html
-<link rel="stylesheet" href="https://cdn.wokki20.nl/content/jspt-v2.0.6/jspt.css">
+<link rel="stylesheet" href="https://cdn.wokki20.nl/content/jspt-v2.1.0/jspt.css">
 <!-- Manually include icon libraries for ES modules -->
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded">
 
 <script type="module">
-import { makeToast } from 'https://cdn.wokki20.nl/content/jspt-v2.0.6/jspt.module.js';
+import { makeToast } from 'https://cdn.wokki20.nl/content/jspt-v2.1.0/jspt.module.js';
 
 makeToast({ 
     message: "ES Module from CDN!",
