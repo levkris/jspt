@@ -1,6 +1,6 @@
 {
   "name": "@wokki20/jspt",
-  "version": "2.0.6",
+  "version": "2.1.0",
   "description": "A modern JavaScript library for creating toast notifications and popups with error handling",
   "main": "dist/jspt.js",
   "module": "dist/jspt.module.js",

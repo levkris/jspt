@@ -70,6 +70,7 @@
             <button onclick="showRightIconToast()">Right Icon</button>
             <button onclick="showBothIconsToast()">Both Icons</button>
             <button onclick="showEmojiToast()">Emoji Toast</button>
+            <button onclick="showLucideToast()">Lucide Toast</button>
         </div>
     </div>
 
@@ -168,6 +169,17 @@
                 icon_left_type: "emoji",
                 duration: 3000
             });
+        }
+
+        function showLucideToast() {
+            jspt.importScript({names: ["lucide"]}).then(() => {
+                jspt.makeToast({
+                    message: "Look at this Lucide icon!",
+                    icon_left: "globe",
+                    icon_left_type: "lucide_icon",
+                    duration: 3000
+                });
+            })
         }
 
         function showClickableToast() {

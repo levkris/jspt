@@ -41,41 +41,89 @@ let debugMode = false;
 const jspt = {
     /**
      * @param {ImportScript} options
-     * @returns {void}
+     * @returns {Promise<void[]>}
      */
     importScript: function(options) {
         const { names } = options;
-        names.forEach(name => {
-            switch (name) {
-                case 'highlightjs':
-                    const hljs = document.createElement('script');
-                    hljs.src = 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js';
-                    document.head.appendChild(hljs);
+        
+        const loadPromises = names.map(name => {
+            return new Promise((resolve, reject) => {
+                switch (name) {
+                    case 'highlightjs':
+                        const hljsSrc = 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js';
+                        const hljsStyleHref = 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css';
+                        
+                        if (document.querySelector(`script[src="${hljsSrc}"]`) || document.querySelector(`link[href="${hljsStyleHref}"]`)) {
+                            console.warn(`${name} is already imported`);
+                            resolve(undefined);
+                            break;
+                        }
+                        
+                        const hljs = document.createElement('script');
+                        hljs.src = hljsSrc;
+                        hljs.onload = () => resolve(undefined);
+                        hljs.onerror = () => reject(new Error(`Failed to load ${name}`));
+                        document.head.appendChild(hljs);
 
-                    const link = document.createElement('link');
-                    link.rel = 'stylesheet';
-                    link.href = 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css';
-                    document.head.appendChild(link);
-                    break;
-                case 'material_symbols_rounded':
-                    const msr = document.createElement('link');
-                    msr.rel = 'stylesheet';
-                    msr.href = 'https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200';
-                    document.head.appendChild(msr);
-                    break;
-                case 'material_symbols_outlined':
-                    const mso = document.createElement('link');
-                    mso.rel = 'stylesheet';
-                    mso.href = 'https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200';
-                    document.head.appendChild(mso);
-                    break;
-                case 'lucide':
-                    const lucide = document.createElement('script');
-                    lucide.src = 'https://unpkg.com/lucide@latest';
-                    document.head.appendChild(lucide);
-                    break;
-            }
+                        const link = document.createElement('link');
+                        link.rel = 'stylesheet';
+                        link.href = hljsStyleHref;
+                        document.head.appendChild(link);
+                        break;
+                    case 'material_symbols_rounded':
+                        const msrHref = 'https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200';
+                        
+                        if (document.querySelector(`link[href="${msrHref}"]`)) {
+                            console.warn(`${name} is already imported`);
+                            resolve(undefined);
+                            break;
+                        }
+                        
+                        const msr = document.createElement('link');
+                        msr.rel = 'stylesheet';
+                        msr.href = msrHref;
+                        msr.onload = () => resolve(undefined);
+                        msr.onerror = () => reject(new Error(`Failed to load ${name}`));
+                        document.head.appendChild(msr);
+                        break;
+                    case 'material_symbols_outlined':
+                        const msoHref = 'https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200';
+                        
+                        if (document.querySelector(`link[href="${msoHref}"]`)) {
+                            console.warn(`${name} is already imported`);
+                            resolve(undefined);
+                            break;
+                        }
+                        
+                        const mso = document.createElement('link');
+                        mso.rel = 'stylesheet';
+                        mso.href = msoHref;
+                        mso.onload = () => resolve(undefined);
+                        mso.onerror = () => reject(new Error(`Failed to load ${name}`));
+                        document.head.appendChild(mso);
+                        break;
+                    case 'lucide':
+                        const lucideSrc = 'https://unpkg.com/lucide@latest';
+                        
+                        if (document.querySelector(`script[src="${lucideSrc}"]`)) {
+                            console.warn(`${name} is already imported`);
+                            resolve(undefined);
+                            break;
+                        }
+                        
+                        const lucide = document.createElement('script');
+                        lucide.src = lucideSrc;
+                        lucide.onload = () => resolve(undefined);
+                        lucide.onerror = () => reject(new Error(`Failed to load ${name}`));
+                        document.head.appendChild(lucide);
+                        break;
+                    default:
+                        resolve(undefined);
+                }
+            });
         });
+        
+        return Promise.all(loadPromises);
     },
     
     /**
@@ -402,6 +450,7 @@ const jspt = {
                     iconLeftElement.innerText = icon_left;
                     break;
                 case 'lucide_icon':
+                    if (typeof lucide === 'undefined') console.warn('Lucide is not loaded, please load it first.');
                     iconLeftElement.dataset.lucide = icon_left;
                     break;
             }
@@ -453,6 +502,7 @@ const jspt = {
                     iconRightElement.innerText = icon_right;
                     break;
                 case 'lucide_icon':
+                    if (typeof lucide === 'undefined') console.warn('Lucide is not loaded, please load it first.');
                     iconRightElement.dataset.lucide = icon_right;
                     break;
             }
